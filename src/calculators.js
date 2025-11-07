@@ -97,6 +97,8 @@ import { mkDurationGrid } from "./grid.js";
  * @property {string} periodDownId ID do input de downtime consolidado.
  * @property {string} periodFailuresId ID do input de falhas contabilizadas.
  * @property {string} periodGridId ID do grid com tempos de parada.
+ * @property {string} [periodAddBtnId] ID do botão "+ linha" do grid de período.
+ * @property {string} [periodClearBtnId] ID do botão de limpar do grid de período.
  * @property {string} periodBtnId ID do botão de cálculo por período.
  * @property {string[]} [seedRows] Amostras iniciais de downtime.
  */
@@ -252,6 +254,8 @@ export function createAvailabilityCalc(cfg) {
     periodDownId,
     periodFailuresId,
     periodGridId,
+    periodAddBtnId,
+    periodClearBtnId,
     periodBtnId,
     seedRows = [],
   } = cfg;
@@ -293,6 +297,17 @@ export function createAvailabilityCalc(cfg) {
     document.getElementById(periodGridId),
     seedRows
   );
+  if (periodAddBtnId) {
+    const btn = document.getElementById(periodAddBtnId);
+    if (btn) btn.addEventListener("click", () => periodGrid.addRow(""));
+  }
+  if (periodClearBtnId) {
+    const btn = document.getElementById(periodClearBtnId);
+    if (btn)
+      btn.addEventListener("click", () => {
+        if (confirm("Limpar todas as linhas?")) periodGrid.clearAll();
+      });
+  }
   document
     .getElementById(`${periodGridId}`)
     .addEventListener("gridchange", debounce(calcPeriod, 150));

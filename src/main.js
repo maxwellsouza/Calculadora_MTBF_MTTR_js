@@ -126,6 +126,8 @@ function init() {
     periodDownId: "periodDown",
     periodFailuresId: "periodFailures",
     periodGridId: "periodTable",
+    periodAddBtnId: "periodAddRow",
+    periodClearBtnId: "periodClear",
     periodBtnId: "btnCalcAvailabilityPeriod",
     seedRows: ["02:30:00", "01:15:00", "00:45:00", "0.5", "01:00:00"],
   });
