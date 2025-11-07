@@ -22,6 +22,31 @@ Este projeto oferece três calculadoras técnicas totalmente interativas — **M
 
 ---
 
+# 🧪 Testes
+
+Este projeto inclui uma suíte de testes unitários simples, executada diretamente no navegador (sem dependências externas).
+
+- Como executar: abra `tests/runner.html` no seu navegador.
+- O que cobre: utilitários puros (`src/utils.js`) e validação do grid (`applyValidation` em `src/grid.js`).
+- Como adicionar novos testes:
+  - Crie um arquivo em `tests/` (ex.: `tests/test-algo.js`).
+  - Importe as funções de teste de `tests/test-runner.js`:
+    - `test(name, fn)`, `assertEquals`, `assertNear`, `assertTrue`, `assertFalse`, `assertDeepEqual`.
+  - Importe seu arquivo no `tests/runner.html` (via `<script type="module">`).
+
+Exemplo básico:
+
+```js
+// tests/test-exemplo.js
+import { test, assertEquals } from './test-runner.js';
+import { sum } from '../src/utils.js';
+
+test('sum soma elementos', () => {
+  assertEquals(sum([1,2,3]), 6);
+});
+```
+
+
 # ✨ Funcionalidades
 
 ✅ **Interface Pastel Ultra-Clean**  
