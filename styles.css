@@ -1,0 +1,665 @@
+/* =============================================================================
+   PASTEL LIGHT + DARK AMOLED — Mobile-first — Ultra-clean
+   - Sem cores Engeman; paleta suave
+   - Dark com preto real (#000), sem modo auto (auto = tratado como light)
+   ========================================================================== */
+
+:root {
+  /* Paleta PASTEL LIGHT */
+  --p1: #ffd9e1; /* rosa suave */
+  --p2: #e8f4ff; /* azul claríssimo */
+  --p3: #e8fff6; /* verde-água claríssimo */
+  --p4: #fff5e2; /* pêssego claro */
+  --accent-1: #86b7f3; /* azul pastel */
+  --accent-2: #f3a986; /* laranja/pêssego pastel */
+  --accent-3: #7cc8b1; /* verde-água pastel */
+  --white: #ffffff;
+
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-2: #f3f5f8;
+  --border: #e3e6ec;
+  --muted: #9aa3af;
+  --text: #2a2f36;
+  --text-weak: #5c6470;
+
+  --ok-bg: #effbf2;
+  --ok-border: #91d1a6;
+  --bad-bg: #fff0f0;
+  --bad-border: #f1a7a6;
+
+  --fs-1: clamp(16px, 3.6vw, 18px);
+  --fs-2: clamp(20px, 4.6vw, 28px);
+  --fs-3: clamp(13px, 3vw, 15px);
+  --fs-4: clamp(12px, 2.8vw, 14px);
+
+  --sp-1: clamp(8px, 2.2vw, 10px);
+  --sp-2: clamp(10px, 3.2vw, 14px);
+  --sp-3: clamp(12px, 4.2vw, 20px);
+  --sp-4: clamp(16px, 5vw, 28px);
+
+  --radius-s: 10px;
+  --radius: 14px;
+  --radius-l: 18px;
+
+  --shadow-0: 0 0 0 rgba(0, 0, 0, 0);
+  --shadow-1: 0 8px 24px rgba(34, 60, 90, 0.06);
+
+  --container-w: min(100%, 1040px);
+
+  /* ripple */
+  --ripple-color: rgba(255, 255, 255, 0.45);
+  --ripple-color-ghost: rgba(0, 0, 0, 0.12);
+}
+
+/* TRATAMENTO: se o seu JS ainda usar 'auto', deixamos 'auto' = LIGHT */
+html[data-theme="auto"] {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-2: #f3f5f8;
+  --border: #e3e6ec;
+  --muted: #9aa3af;
+  --text: #2a2f36;
+  --text-weak: #5c6470;
+}
+
+/* DARK AMOLED (preto real, sem auto) */
+html[data-theme="dark"] {
+  --bg: #000000; /* amoled */
+  --surface: #0b0b0b; /* painéis */
+  --surface-2: #101010; /* header/inputs */
+  --border: #1a1a1a;
+  --muted: #9aa3af; /* mantém legível */
+  --text: #f2f2f2;
+  --text-weak: #bbbbbb;
+
+  --ok-bg: #0a1d12;
+  --ok-border: #2aa86b;
+  --bad-bg: #2a1212;
+  --bad-border: #cf6f6d;
+
+  --ripple-color: rgba(255, 255, 255, 0.35);
+  --ripple-color-ghost: rgba(255, 255, 255, 0.18);
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: var(--fs-1);
+  line-height: 1.55;
+}
+
+/* ------------------------------ Brand bar -------------------------------- */
+.brandbar {
+  background: radial-gradient(
+      1200px 70% at 10% -10%,
+      var(--p2),
+      transparent 60%
+    ),
+    radial-gradient(1200px 70% at 90% -20%, var(--p4), transparent 60%),
+    linear-gradient(135deg, var(--white), var(--p1));
+  border-bottom: 1px solid var(--border);
+}
+html[data-theme="dark"] .brandbar {
+  background: radial-gradient(
+      1000px 60% at 10% -20%,
+      rgba(134, 183, 243, 0.06),
+      transparent 60%
+    ),
+    radial-gradient(
+      1000px 60% at 90% -10%,
+      rgba(243, 169, 134, 0.06),
+      transparent 60%
+    ),
+    linear-gradient(135deg, #0a0a0a, #050505);
+  border-bottom: 1px solid var(--border);
+}
+
+.brandbar-inner {
+  width: var(--container-w);
+  margin: 0 auto;
+  padding: var(--sp-2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+}
+.brand-logo .mark {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, var(--p2), var(--p4));
+  box-shadow: 0 0 0 3px rgba(134, 183, 243, 0.15);
+}
+html[data-theme="dark"] .brand-logo .mark {
+  background: linear-gradient(135deg, #0f1a22, #1a120c);
+  box-shadow: 0 0 0 3px rgba(134, 183, 243, 0.12);
+}
+.brand-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+/* ------------------------------ Header ----------------------------------- */
+.app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+html[data-theme="dark"] .app-header {
+  background: var(--surface);
+}
+.app-header-inner {
+  width: var(--container-w);
+  margin: 0 auto;
+  padding: var(--sp-3) var(--sp-2);
+  text-align: center;
+}
+.app-title {
+  margin: 0 0 6px 0;
+  font-size: var(--fs-2);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+.subtitle {
+  margin: 0;
+  color: var(--text-weak);
+  font-size: var(--fs-3);
+}
+
+/* -------------------------- Container & Tabs ------------------------------ */
+.container {
+  width: var(--container-w);
+  margin: 0 auto;
+  padding: var(--sp-2);
+}
+
+.switcher.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in oklab, var(--surface), transparent 12%);
+  backdrop-filter: blur(6px) saturate(1.05);
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-row {
+  display: flex;
+  gap: var(--sp-1);
+  width: var(--container-w);
+  margin: 0 auto;
+  padding: var(--sp-1) 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+/* Tabs — pastel */
+.tab-btn {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  transition: background 0.18s, border-color 0.18s, color 0.18s,
+    box-shadow 0.18s, transform 0.04s;
+  white-space: nowrap;
+}
+.tab-btn:hover:not(.active) {
+  background: var(--surface-2);
+}
+.tab-btn:active {
+  transform: translateY(1px);
+}
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--p2), var(--p4));
+  color: var(--text);
+  border-color: transparent;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-1), transparent 80%);
+}
+html[data-theme="dark"] .tab-btn.active {
+  background: linear-gradient(135deg, #0f1a22, #1a120c);
+  color: #f0f0f0;
+  box-shadow: 0 0 0 3px rgba(134, 183, 243, 0.18);
+}
+.tab-btn i {
+  margin-right: 6px;
+  font-size: 0.9em;
+}
+
+/* ------------------------------ Panel ------------------------------------ */
+.panel {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: var(--sp-3);
+  margin-top: var(--sp-2);
+  box-shadow: var(--shadow-0);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+.panel:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-1);
+}
+.panel.anim-swap {
+  animation: fadeSlide 0.28s ease-out;
+}
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.panel-text {
+  margin-bottom: var(--sp-2);
+}
+.hidden {
+  display: none;
+}
+
+/* ------------------------------ Forms ------------------------------------ */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-2);
+}
+@media (min-width: 880px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.calculator h3 {
+  margin: 0 0 var(--sp-1) 0;
+  font-weight: 800;
+}
+
+.field span {
+  font-weight: 700;
+}
+.field input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-s);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--fs-1);
+  transition: border-color 0.16s, box-shadow 0.16s, background 0.16s;
+}
+.field input::placeholder {
+  color: var(--muted);
+}
+.field input:focus {
+  outline: none;
+  border-color: color-mix(in oklab, var(--accent-1), transparent 30%);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-1), transparent 82%);
+}
+
+/* --------------------------- Buttons & Ripple ----------------------------- */
+.actions {
+  display: flex;
+  gap: var(--sp-1);
+  flex-wrap: wrap;
+}
+
+.primary,
+.ghost.small,
+.btn-icon {
+  position: relative;
+  overflow: hidden;
+}
+
+.primary {
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  color: #0b2740;
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 0;
+  cursor: pointer;
+  font-size: var(--fs-1);
+  font-weight: 800;
+  transition: filter 0.16s, transform 0.04s, box-shadow 0.18s;
+}
+.primary:hover {
+  filter: brightness(1.02);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-1), transparent 80%);
+}
+.primary:active {
+  transform: translateY(1px);
+}
+.primary:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent-1), transparent 60%);
+}
+html[data-theme="dark"] .primary {
+  color: #f5f7fb;
+  background: linear-gradient(135deg, #16324a, #3a2320);
+  box-shadow: 0 0 0 0 transparent;
+}
+
+.ghost.small,
+.btn-icon {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: var(--fs-4);
+  font-weight: 700;
+  transition: background 0.16s, border-color 0.16s, color 0.16s;
+}
+.ghost.small:hover,
+.btn-icon:hover {
+  background: var(--surface-2);
+}
+
+/* Ripple */
+.ripple-ink {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  pointer-events: none;
+  opacity: 0.45;
+  animation: ripple 0.6s ease-out forwards;
+}
+@keyframes ripple {
+  to {
+    transform: scale(10);
+    opacity: 0;
+  }
+}
+
+/* ------------------------------ Grid.js ---------------------------------- */
+.block {
+  margin-bottom: var(--sp-2);
+}
+.block-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+.separator {
+  margin: 16px 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+.table {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: auto;
+  background: var(--surface);
+}
+
+/* Modo compacto fixo */
+.gjs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-3);
+  color: var(--text);
+  line-height: 1.3;
+  background: var(--surface);
+}
+.gjs-table th,
+.gjs-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 6px 8px;
+  white-space: nowrap;
+}
+.gjs-table th {
+  background: var(--surface-2);
+  color: var(--text);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-weight: 700;
+}
+/* Hover sutil */
+.gjs-table tr:hover td {
+  background: color-mix(in oklab, var(--accent-1), transparent 92%);
+}
+
+/* Inputs no grid */
+.gjs-input {
+  width: 100%;
+  min-width: 112px;
+  padding: 5px 7px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color 0.12s, box-shadow 0.12s;
+  font-size: 0.94em;
+}
+.gjs-input:focus {
+  outline: none;
+  border-color: color-mix(in oklab, var(--accent-1), transparent 30%);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-1), transparent 82%);
+}
+
+/* Validação */
+.gjs-input.valid {
+  border-color: var(--ok-border);
+  background: var(--ok-bg);
+}
+.gjs-input.invalid {
+  border-color: var(--bad-border);
+  background: var(--bad-bg);
+}
+
+/* Botão remover linha */
+.row-del {
+  padding: 5px 7px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in oklab, var(--accent-2), white 30%);
+  background: color-mix(in oklab, var(--accent-2), white 75%);
+  color: #6a3d2e;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.row-del:hover {
+  background: color-mix(in oklab, var(--accent-2), white 70%);
+  border-color: color-mix(in oklab, var(--accent-2), white 20%);
+}
+
+/* Responsividade tabelas */
+@media (max-width: 920px) {
+  .gjs-table th,
+  .gjs-table td {
+    padding: 5px 7px;
+  }
+  .gjs-input {
+    min-width: 108px;
+    font-size: 0.92em;
+  }
+}
+@media (max-width: 720px) {
+  .gjs-table th,
+  .gjs-table td {
+    padding: 5px 6px;
+  }
+  .gjs-input {
+    min-width: 100px;
+    font-size: 0.9em;
+  }
+}
+
+/* DARK AMOLED — grid sem zebra e fundo escuro uniforme */
+html[data-theme="dark"] .gjs-table {
+  background: var(--surface);
+  color: var(--text);
+}
+html[data-theme="dark"] .gjs-table th {
+  background: var(--surface-2);
+  border-bottom-color: var(--border);
+  color: #f0f0f0;
+}
+html[data-theme="dark"] .gjs-table td {
+  background: var(--surface);
+  border-bottom-color: var(--border);
+}
+html[data-theme="dark"] .gjs-table tr:nth-child(even) td {
+  background: var(--surface);
+} /* sem zebra */
+html[data-theme="dark"] .gjs-table tr:hover td {
+  background: #121212;
+}
+
+/* Inputs no grid (dark) */
+html[data-theme="dark"] .gjs-input {
+  background: #0f0f0f;
+  color: #f5f5f5;
+  border-color: #222;
+}
+html[data-theme="dark"] .gjs-input:focus {
+  border-color: #2e6ea9;
+  box-shadow: 0 0 0 3px rgba(46, 110, 169, 0.35);
+}
+
+/* Resultado e notas */
+.result {
+  display: block;
+  margin-top: 8px;
+  font-weight: 800;
+  color: color-mix(in oklab, var(--accent-1), #3a2320 30%);
+  font-size: clamp(18px, 4.6vw, 22px);
+}
+.notes {
+  color: var(--text-weak);
+  font-size: var(--fs-4);
+  margin-top: 4px;
+}
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding: var(--sp-3) var(--sp-2);
+  color: var(--text-weak);
+}
+
+/* Safe-area (iPhone) */
+@supports (padding: max(0px)) {
+  .brandbar,
+  .switcher.sticky,
+  .app-header-inner,
+  .container {
+    padding-left: max(var(--sp-2), env(safe-area-inset-left));
+    padding-right: max(var(--sp-2), env(safe-area-inset-right));
+  }
+}
+
+/* PRINT */
+@media print {
+  .brandbar,
+  .switcher.sticky {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .panel {
+    border: 1px solid #ddd;
+  }
+}
+
+/* Acessibilidade utilitária */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Caixas de fórmula / exemplo / nota (do copy-ptBR.js) ---- */
+.formula,
+.example,
+.note,
+.info-box {
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin: 12px 0;
+}
+.formula {
+  border-left: 4px solid var(--accent-1);
+}
+.formula.alt {
+  border-left-color: var(--accent-2);
+}
+.formula-title {
+  font-weight: 800;
+  margin-bottom: 6px;
+  font-size: var(--fs-3);
+  letter-spacing: 0.2px;
+}
+.formula code,
+.example code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+    monospace;
+  font-size: 0.96em;
+  background: transparent;
+  padding: 0;
+}
+.example {
+  background: color-mix(in oklab, var(--surface-2), white 6%);
+}
+.note {
+  background: color-mix(in oklab, var(--surface-2), white 3%);
+}
+.info-box {
+  background: color-mix(in oklab, var(--surface-2), white 4%);
+}
+
+html[data-theme="dark"] .formula,
+html[data-theme="dark"] .example,
+html[data-theme="dark"] .note,
+html[data-theme="dark"] .info-box {
+  background: #0f0f0f;
+  border-color: #1a1a1a;
+}
