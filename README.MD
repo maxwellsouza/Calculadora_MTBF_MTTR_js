@@ -1,40 +1,70 @@
+<h1 align="center">Calculadoras de MTBF, MTTR e Disponibilidade</h1>
 <p align="center">
-  <img src="https://img.shields.io/badge/JS-ESModules-F7DF1E?style=for-the-badge&logo=javascript&logoColor=000" />
-  <img src="https://img.shields.io/badge/Grid.js-Editable%20Tables-3772FF?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/UI-Pastel%20%2B%20AMOLED-FFC8DD?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/License-MIT-2ecc71?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Responsive-Mobile%20First-6a82fb?style=for-the-badge&logo=android&logoColor=white" />
-  <img src="https://img.shields.io/badge/Static-100%25%20Frontend-9b59b6?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/JS-ESModules-F7DF1E?style=for-the-badge&logo=javascript&logoColor=000" alt="JS ESModules" />
+  <img src="https://img.shields.io/badge/Grid.js-Editable%20Grids-3772FF?style=for-the-badge" alt="Grid.js" />
+  <img src="https://img.shields.io/badge/Responsive-Mobile%20First-6a82fb?style=for-the-badge&logo=android&logoColor=white" alt="Responsive" />
+  <img src="https://img.shields.io/badge/Static-100%25%20Frontend-9b59b6?style=for-the-badge" alt="Static" />
+  <img src="https://img.shields.io/badge/Tests-Browser--based-2F855A?style=for-the-badge" alt="Tests" />
+  <img src="https://img.shields.io/badge/License-MIT-2ecc71?style=for-the-badge" alt="MIT License" />
 </p>
 
-<br />
+Aplicativo 100% front‑end (ES Modules) para cálculos de MTBF, MTTR e Disponibilidade. Interface responsiva, grids editáveis com validação e textos explicativos. Sem build/bundler: basta abrir no navegador.
 
-# 🔗 Live Preview
-Acesse a demonstração interativa:  
-https://maxwellsouza.github.io/Calculadora_MTBF_MTTR_js/
+— Live Preview: https://maxwellsouza.github.io/Calculadora_MTBF_MTTR_js/
 
-# 📊 Calculadoras de MTBF, MTTR e Disponibilidade  
-**Interface Ultra-Clean • JavaScript ESM • Grid.js • Responsivo • Tema Pastel + Dark AMOLED**
+## Recursos
 
-Este projeto oferece três calculadoras técnicas totalmente interativas — **MTBF**, **MTTR** e **Disponibilidade** — desenvolvidas com **JavaScript modular (ESM)**, interface **clean pastel**, grids editáveis usando **Grid.js**, textos explicativos completos e experiência de uso responsiva.
+- Três calculadoras: MTBF, MTTR e Disponibilidade (estimada e por período)
+- Grids editáveis (Grid.js) com validação visual e ARIA
+- Conversão automática de hh:mm:ss para horas decimais
+- Dois métodos: amostral (grid) e agregado (total/contagem)
+- Modo escuro (AMOLED) e tema pastel
+- Autosave via localStorage (recupera sessão)
+- Arquitetura modular (ESM) e fácil manutenção
 
-É uma ferramenta ideal para profissionais de **Confiabilidade, Manutenção, Engenharia, Facilities, Produção e Operações**.
+## Como usar
 
----
+- Abra `index.html` no seu navegador.
+- Navegue nas abas para selecionar a calculadora.
+- Preencha os campos ou edite as linhas do grid. Os resultados e notas são atualizados automaticamente ou via botão “Calcular”.
 
-# 🧪 Testes
+Observações:
+- O grid do período (Disponibilidade) aceita linhas de downtime individuais; ao informar o grid, ele tem prioridade sobre o downtime total único.
+- Os dados persistem localmente na chave `calc-mtbf-mttr-avail-v4` do `localStorage`.
 
-Este projeto inclui uma suíte de testes unitários simples, executada diretamente no navegador (sem dependências externas).
+## Tecnologias
 
-- Como executar: abra `tests/runner.html` no seu navegador.
-- O que cobre: utilitários puros (`src/utils.js`) e validação do grid (`applyValidation` em `src/grid.js`).
-- Como adicionar novos testes:
-  - Crie um arquivo em `tests/` (ex.: `tests/test-algo.js`).
-  - Importe as funções de teste de `tests/test-runner.js`:
-    - `test(name, fn)`, `assertEquals`, `assertNear`, `assertTrue`, `assertFalse`, `assertDeepEqual`.
-  - Importe seu arquivo no `tests/runner.html` (via `<script type="module">`).
+- JavaScript ES Modules (navegador)
+- Grid.js (via CDN UMD)
+- Font Awesome (ícones) e Google Fonts
 
-Exemplo básico:
+## Estrutura do projeto
+
+```
+.
+├─ index.html         # Página principal (UI + CDN)
+├─ styles.css         # Estilos (light/dark, responsivo)
+├─ copy-ptBR.js       # Conteúdo técnico e textos de apoio
+├─ src/
+│  ├─ utils.js        # Parsers, estatística, formatação, debounce, storage, helpers de UI
+│  ├─ grid.js         # Integração com Grid.js e validação dos inputs do grid
+│  ├─ calculators.js  # Lógica das calculadoras (MTBF/MTTR/Disponibilidade)
+│  ├─ ui.js           # Abas, tema, ripple e transições
+│  └─ main.js         # Bootstrap, autosave/restore, wiring de eventos
+└─ tests/
+   ├─ test-runner.js  # Mini harness de testes (browser)
+   ├─ test-utils.js   # Testes de utilitários
+   ├─ test-grid.js    # Testes de validação do grid
+   └─ runner.html     # Página para executar os testes
+```
+
+## Testes
+
+- Execute em `tests/runner.html` (abra no navegador).
+- Cobertura inicial: utilitários (`src/utils.js`) e validação do grid (`applyValidation` em `src/grid.js`).
+- Para adicionar testes: crie `tests/test-*.js` e importe em `tests/runner.html`.
+
+Exemplo:
 
 ```js
 // tests/test-exemplo.js
@@ -46,63 +76,18 @@ test('sum soma elementos', () => {
 });
 ```
 
+## Acessibilidade & UX
 
-# ✨ Funcionalidades
+- Entradas do grid recebem `valid`/`invalid` e `aria-invalid` conforme a validação.
+- Resultados são apresentados em elementos `<output>` com `aria-live="polite"`.
+- Animações discretas e foco em legibilidade.
 
-✅ **Interface Pastel Ultra-Clean**  
-✅ **Modo Escuro AMOLED (preto real)**  
-✅ **Layout responsivo e mobile-first**  
-✅ **Três calculadoras completas**  
-✅ **Grids editáveis com validação automática**  
-✅ **Conversão automática de hh:mm:ss → horas**  
-✅ **Método Amostral e Método Agregado**  
-✅ **Autosave via localStorage**  
-✅ **Arquitetura modular (ESM)**  
-✅ **Fácil expansão e manutenção**
+## Manutenção e Extensão
 
----
+- IDs dos elementos estão centralizados no `index.html` e passados via config nas fábricas das calculadoras.
+- Para o grid de disponibilidade por período, botões `periodAddRow`/`periodClear` são conectados à API do grid.
+- Guia completo para devs (arquitetura, fluxos, APIs, persistência, dicas): consulte `DEVELOPERS.md`.
 
-# 📐 Indicadores Suportados
+## Licença
 
-### **MTBF — Mean Time Between Failures**
-Tempo médio entre falhas → mede **confiabilidade**.
-
-### **MTTR — Mean Time To Repair**
-Tempo médio de reparo → mede **manutenibilidade**.
-
-### **Disponibilidade**
-Percentual de tempo operacional  
-- **Estimado** (MTBF/MTTR)  
-- **Observado** (período real)  
-- **Estimado por nº de falhas**  
-
-Todos os textos explicativos estão em `copy-ptBR.js`.
-
----
-
-# 📁 Estrutura do Projeto
-
-/  
-├── index.html  
-├── styles.css  
-├── copy-ptBR.js  
-└── src/  
-├── utils.js  
-├── grid.js  
-├── calculators.js  
-├── ui.js  
-└── main.js  
-
-
-### 🧩 Descrição dos módulos
-
-| Arquivo          | Função Principal                         |
-| ---------------- | ---------------------------------------- |
-| `utils.js`       | Parsers, estatísticas, debounce, storage |
-| `grid.js`        | Criação/validação dos grids (Grid.js)    |
-| `calculators.js` | Lógica MTBF, MTTR e Disponibilidade      |
-| `ui.js`          | Abas, animações, modo claro/escuro       |
-| `main.js`        | Orquestra tudo                           |
-| `copy-ptBR.js`   | Conteúdo técnico e textos exibidos       |
-
----
+MIT.
