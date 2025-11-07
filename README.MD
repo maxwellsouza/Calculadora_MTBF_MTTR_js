@@ -9,6 +9,10 @@
 
 <br />
 
+# 🔗 Live Preview
+Acesse a demonstração interativa:  
+https://maxwellsouza.github.io/Calculadora_MTBF_MTTR_js/
+
 # 📊 Calculadoras de MTBF, MTTR e Disponibilidade  
 **Interface Ultra-Clean • JavaScript ESM • Grid.js • Responsivo • Tema Pastel + Dark AMOLED**
 
