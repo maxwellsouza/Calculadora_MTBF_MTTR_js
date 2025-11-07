@@ -1,6 +1,20 @@
 // grid.js
 import { parseDurationToHours, debounce, escapeAttr } from "./utils.js";
 
+/**
+ * @typedef {Object} DurationGridApi
+ * @property {(value?: string) => void} addRow Inclui uma nova linha e dispara validação.
+ * @property {() => void} clearAll Remove todas as linhas existentes.
+ * @property {() => number[]} getValues Retorna valores válidos convertidos para horas.
+ * @property {() => string[]} getRaw Retorna os dados brutos como texto.
+ * @property {() => boolean} hasInvalid Reexecuta a validação e indica se há valores inválidos.
+ */
+
+/**
+ * Valida inputs do grid e aplica classes de feedback visual/ARIA.
+ * @param {HTMLElement} container Elemento raiz contendo os inputs do grid.
+ * @returns {boolean} Indica se algum campo está inválido.
+ */
 export function applyValidation(container) {
   let anyInvalid = false;
   container.querySelectorAll("input.gjs-input").forEach((inp) => {
@@ -14,6 +28,12 @@ export function applyValidation(container) {
   return anyInvalid;
 }
 
+/**
+ * Instancia um grid editável para capturar durações no formato decimal ou hh:mm:ss.
+ * @param {HTMLElement} mountEl Elemento que receberá a tabela do Grid.js.
+ * @param {Array<string|number>} [initialData=[]] Valores iniciais a popular o grid.
+ * @returns {DurationGridApi} API minimalista para interação com o restante da aplicação.
+ */
 export function mkDurationGrid(mountEl, initialData = []) {
   if (!("gridjs" in window)) throw new Error("Grid.js não encontrado.");
   const { Grid, html } = window.gridjs;

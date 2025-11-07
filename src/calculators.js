@@ -10,7 +10,103 @@ import {
 } from "./utils.js";
 import { mkDurationGrid } from "./grid.js";
 
-// Regras comuns (média amostral priorizada > agregado)
+/**
+ * @typedef {Object} CalcData
+ * @property {number[]} list Lista de tempos válidos informados nas linhas do grid.
+ * @property {number|null} total Tempo agregado informado no formulário auxiliar.
+ * @property {number} count Quantidade de ocorrências usadas no cálculo agregado.
+ */
+
+/**
+ * @typedef {"amostral"|"agregado"} CalcMethod
+ */
+
+/**
+ * @typedef {Object} CalcSuccess
+ * @property {CalcMethod} method Estratégia aplicada para produzir o resultado.
+ * @property {number} mean Valor médio calculado em horas.
+ * @property {number} [median] Mediana das amostras quando disponíveis.
+ * @property {number} [stdev] Desvio-padrão das amostras quando disponíveis.
+ * @property {number} [n] Número de amostras processadas.
+ */
+
+/**
+ * @typedef {Object} CalcError
+ * @property {string} error Mensagem explicando o motivo da falha.
+ */
+
+/**
+ * @typedef {CalcSuccess|CalcError} CalcOutcome
+ */
+
+/**
+ * @typedef {Object} TimeMetricSnapshot
+ * @property {string} total Texto informado no campo de tempo agregado.
+ * @property {string|number} count Valor numérico ou textual do campo de ocorrências.
+ * @property {string[]} rows Linhas persistidas do grid de tempos individuais.
+ */
+
+/**
+ * @typedef {Object} TimeMetricCalcAPI
+ * @property {() => void} calc Força o recálculo manual da métrica.
+ * @property {() => TimeMetricSnapshot} getState Serializa o estado atual da calculadora.
+ * @property {(state: TimeMetricSnapshot|null|undefined) => void} setState Restaura valores previamente salvos.
+ */
+
+/**
+ * @typedef {Object} TimeMetricCalcConfig
+ * @property {string} sectionId ID da seção que abriga os controles da calculadora.
+ * @property {string} gridMountId ID do contêiner onde o grid será montado.
+ * @property {string} addBtnId ID do botão que adiciona novas linhas.
+ * @property {string} clearBtnId ID do botão que limpa as linhas.
+ * @property {string} totalInputId ID do campo de tempo total agregado.
+ * @property {string} countInputId ID do campo de contagem de eventos.
+ * @property {string} calcBtnId ID do botão de cálculo manual.
+ * @property {string} resultOutId ID do campo que recebe o resultado textual.
+ * @property {string} notesId ID do contêiner para observações sobre o método.
+ * @property {string} aggregateLabel Texto usado ao descrever o método agregado.
+ * @property {string[]} [seedRows] Linhas iniciais para popular o grid.
+ */
+
+/**
+ * @typedef {Object} AvailabilitySnapshot
+ * @property {string} mtbf Valor do campo MTBF persistido.
+ * @property {string} mttr Valor do campo MTTR persistido.
+ * @property {string} period Período total utilizado nos cálculos.
+ * @property {string} down Tempo de indisponibilidade consolidado.
+ * @property {string|number} failures Quantidade de falhas informada.
+ * @property {string[]} rows Linhas persistidas do grid de downtime.
+ */
+
+/**
+ * @typedef {Object} AvailabilityCalcAPI
+ * @property {() => void} calcSteady Executa o cálculo estacionário.
+ * @property {() => void} calcPeriod Executa o cálculo referente a um período.
+ * @property {() => AvailabilitySnapshot} getState Serializa valores de todos os campos.
+ * @property {(state: AvailabilitySnapshot|null|undefined) => void} setState Restaura um snapshot salvo.
+ */
+
+/**
+ * @typedef {Object} AvailabilityCalcConfig
+ * @property {string} availMtbfId ID do input de MTBF para estimativas.
+ * @property {string} availMttrId ID do input de MTTR para estimativas.
+ * @property {string} steadyBtnId ID do botão de cálculo estacionário.
+ * @property {string} steadyOutId ID do campo com o resultado estacionário.
+ * @property {string} steadyNotesId ID do elemento que mostra observações.
+ * @property {string} periodTotalId ID do input de tempo total do período.
+ * @property {string} periodDownId ID do input de downtime consolidado.
+ * @property {string} periodFailuresId ID do input de falhas contabilizadas.
+ * @property {string} periodGridId ID do grid com tempos de parada.
+ * @property {string} periodBtnId ID do botão de cálculo por período.
+ * @property {string[]} [seedRows] Amostras iniciais de downtime.
+ */
+
+/**
+ * Seleciona a estratégia de cálculo com base nos dados fornecidos.
+ * Dá prioridade a dados amostrais válidos, caindo para totais agregados.
+ * @param {CalcData} params Coleção de dados disponíveis.
+ * @returns {CalcOutcome} Resultado processado com metadados do cálculo ou mensagem de erro.
+ */
 function calcFromGridOrAggregate({ list, total, count }) {
   if (list.length > 0) {
     const m = mean(list);
@@ -39,6 +135,11 @@ function calcFromGridOrAggregate({ list, total, count }) {
 }
 
 // Factory para MTBF/MTTR (DRY)
+/**
+ * Cria a calculadora de métricas temporais (MTBF/MTTR) com integração ao grid.
+ * @param {TimeMetricCalcConfig} cfg Configuração de elementos e mensagens da interface.
+ * @returns {TimeMetricCalcAPI} API simplificada para integração com o módulo principal.
+ */
 export function createTimeMetricCalc(cfg) {
   const {
     // IDs
@@ -73,6 +174,11 @@ export function createTimeMetricCalc(cfg) {
     if (confirm("Limpar todas as linhas?")) grid.clearAll();
   });
 
+  /**
+   * Recalcula a métrica escolhendo entre dados amostrais ou agregados.
+   * Atualiza campos de resultado e notas na interface.
+   * @returns {void}
+   */
   function calc() {
     notes.textContent = "";
     if (grid.hasInvalid()) {
@@ -130,6 +236,11 @@ export function createTimeMetricCalc(cfg) {
   };
 }
 
+/**
+ * Instancia a calculadora de disponibilidade combinando estimativas e medições.
+ * @param {AvailabilityCalcConfig} cfg Configuração de elementos HTML utilizados.
+ * @returns {AvailabilityCalcAPI} API para interação com o ciclo de autosave/restauração.
+ */
 export function createAvailabilityCalc(cfg) {
   const {
     availMtbfId,
@@ -150,6 +261,10 @@ export function createAvailabilityCalc(cfg) {
   const steadyOut = document.getElementById(steadyOutId);
   const steadyNotes = document.getElementById(steadyNotesId);
 
+  /**
+   * Calcula a disponibilidade estacionária via fórmula MTBF/(MTBF+MTTR).
+   * @returns {void}
+   */
   function calcSteady() {
     steadyNotes.textContent = "";
     const mtbf = parseDurationToHours(avMTBF.value);
@@ -189,6 +304,11 @@ export function createAvailabilityCalc(cfg) {
     i.addEventListener("input", debounce(calcPeriod, 150))
   );
 
+  /**
+   * Calcula disponibilidade para um período usando prioridades (grid, total, falhas).
+   * Atualiza o resumo com o método aplicado.
+   * @returns {void}
+   */
   function calcPeriod() {
     const out = document.getElementById("availabilityPeriodResult");
     const notes = document.getElementById("availabilityPeriodNotes");
@@ -267,10 +387,9 @@ export function createAvailabilityCalc(cfg) {
       if (typeof s.down === "string") periodDown.value = s.down;
       if (typeof s.failures === "string" || typeof s.failures === "number")
         periodFailures.value = s.failures;
-      if (Array.isArray(s.rows) && s.rows.length) {
-        const el = document.getElementById(periodGridId);
-        // limpa e re-adiciona
-        el.dispatchEvent(new CustomEvent("gridclearall")); // opcional
+      if (Array.isArray(s.rows)) {
+        periodGrid.clearAll();
+        s.rows.forEach((v) => periodGrid.addRow(String(v)));
       }
     },
   };

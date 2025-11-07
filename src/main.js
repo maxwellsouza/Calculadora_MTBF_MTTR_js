@@ -15,6 +15,26 @@ import {
 } from "./ui.js";
 import { createTimeMetricCalc, createAvailabilityCalc } from "./calculators.js";
 
+/**
+ * @typedef {import("./calculators.js").TimeMetricCalcAPI} TimeMetricCalcAPI
+ * @typedef {import("./calculators.js").AvailabilityCalcAPI} AvailabilityCalcAPI
+ * @typedef {import("./calculators.js").TimeMetricSnapshot} TimeMetricSnapshot
+ * @typedef {import("./calculators.js").AvailabilitySnapshot} AvailabilitySnapshot
+ */
+
+/**
+ * @typedef {Object} PersistedState
+ * @property {TimeMetricSnapshot} mtbf Estado salvo da calculadora de MTBF.
+ * @property {TimeMetricSnapshot} mttr Estado salvo da calculadora de MTTR.
+ * @property {AvailabilitySnapshot} avail Estado salvo da calculadora de disponibilidade.
+ * @property {string} activeTab Identificador da aba ativa na última sessão.
+ */
+
+/**
+ * Inicializa a aplicação configurando temas, abas e calculadoras MTBF/MTTR.
+ * Responsável por restaurar estado salvo e disparar cálculos iniciais.
+ * @returns {void}
+ */
 function init() {
   applyStoredTheme();
   attachRipple(document);
@@ -65,6 +85,7 @@ function init() {
   document.getElementById("btnTheme").addEventListener("click", toggleTheme);
 
   // Calculadoras (config → fábrica)
+  /** @type {TimeMetricCalcAPI} */
   const mtbf = createTimeMetricCalc({
     sectionId: "calcMTBF",
     gridMountId: "mtbfTable",
@@ -79,6 +100,7 @@ function init() {
     seedRows: ["210", "3:00:00", "2:45:30", "190", "215"],
   });
 
+  /** @type {TimeMetricCalcAPI} */
   const mttr = createTimeMetricCalc({
     sectionId: "calcMTTR",
     gridMountId: "mttrTable",
@@ -93,6 +115,7 @@ function init() {
     seedRows: ["2.5", "3", "2:12:00", "3:06:00", "3.4"],
   });
 
+  /** @type {AvailabilityCalcAPI} */
   const avail = createAvailabilityCalc({
     availMtbfId: "avMTBF",
     availMttrId: "avMTTR",
@@ -109,12 +132,15 @@ function init() {
 
   // Autosave/restore único
   const saveAll = () =>
-    saveState({
-      mtbf: mtbf.getState(),
-      mttr: mttr.getState(),
-      avail: avail.getState(),
-      activeTab: document.querySelector(".tab-btn.active")?.id || "btnIntro",
-    });
+    saveState(
+      /** @type {PersistedState} */ ({
+        mtbf: mtbf.getState(),
+        mttr: mttr.getState(),
+        avail: avail.getState(),
+        activeTab:
+          document.querySelector(".tab-btn.active")?.id || "btnIntro",
+      })
+    );
 
   document.addEventListener("input", saveAll);
   document.getElementById("mtbfTable").addEventListener("gridchange", saveAll);
@@ -123,7 +149,7 @@ function init() {
     .getElementById("periodTable")
     .addEventListener("gridchange", saveAll);
 
-  const s = loadState();
+  const s = /** @type {PersistedState|null} */ (loadState());
   if (s) {
     mtbf.setState(s.mtbf);
     mttr.setState(s.mttr);

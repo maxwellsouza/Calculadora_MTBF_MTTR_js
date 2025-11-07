@@ -1,4 +1,9 @@
 // ui.js
+/**
+ * Atualiza estado visual das abas, garantindo exclusividade da seleção.
+ * @param {string} id Identificador da aba que deve permanecer ativa.
+ * @returns {void}
+ */
 export function setActiveTab(id) {
   ["btnIntro", "btnMTBF", "btnMTTR", "btnAvailability"].forEach((btnId) => {
     const el = document.getElementById(btnId);
@@ -8,6 +13,10 @@ export function setActiveTab(id) {
   });
 }
 
+/**
+ * Reinicia a animação de troca do painel de conteúdo.
+ * @returns {void}
+ */
 export function swapPanelAnim() {
   const panel = document.querySelector(".panel");
   if (!panel) return;
@@ -17,11 +26,19 @@ export function swapPanelAnim() {
 }
 
 const THEME_KEY = "calc-theme";
+/**
+ * Aplica o tema salvo (ou modo automático) à tag raiz.
+ * @returns {void}
+ */
 export function applyStoredTheme() {
   const html = document.documentElement;
   const pref = localStorage.getItem(THEME_KEY);
   html.setAttribute("data-theme", pref || "auto");
 }
+/**
+ * Alterna entre os temas claro, escuro e automático, atualizando o ícone.
+ * @returns {void}
+ */
 export function toggleTheme() {
   const html = document.documentElement;
   const cur = html.getAttribute("data-theme") || "auto";
@@ -39,6 +56,11 @@ export function toggleTheme() {
 }
 
 // ripple minimalista
+/**
+ * Adiciona efeito "ripple" a botões definidos no escopo observado.
+ * @param {Document|HTMLElement} [root=document] Raiz onde os eventos serão observados.
+ * @returns {void}
+ */
 export function attachRipple(root = document) {
   root.addEventListener("click", (e) => {
     const btn = e.target.closest(".primary.ripple, .ghost.small, .btn-icon");
