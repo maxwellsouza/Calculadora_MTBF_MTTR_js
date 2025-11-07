@@ -53,16 +53,16 @@ Todos os textos explicativos estão em `copy-ptBR.js`.
 
 # 📁 Estrutura do Projeto
 
-/
-├── index.html
-├── styles.css
-├── copy-ptBR.js
-└── src/
-├── utils.js
-├── grid.js
-├── calculators.js
-├── ui.js
-└── main.js
+/  
+├── index.html  
+├── styles.css  
+├── copy-ptBR.js  
+└── src/  
+├── utils.js  
+├── grid.js  
+├── calculators.js  
+├── ui.js  
+└── main.js  
 
 
 ### 🧩 Descrição dos módulos
